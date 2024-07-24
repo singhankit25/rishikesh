@@ -1,0 +1,56 @@
+<h1> Enrolled List using AJAX Call </h1>
+<form action="" method="POST">
+Select Course Code: <select name="course" id="ccode">
+    {% for c in courseList %}
+    <option value="{{c.id}}">{{c.courseCode}}</option>
+    {% endfor %}
+</select>
+
+<input type="button" value="SEARCH" id="btn"/>
+<span id="resp"></span>
+{% if studentList %}
+<table border="1">
+    <tr>
+        <th>
+            SLNO
+        </th>
+        <th>
+            USN
+        </th>
+        <th>
+            NAME
+        </th>
+        <th>
+            SEM
+        </th>
+    </tr>
+
+    {% for s in studentList %}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{s.usn}}</td>
+        <td>{{s.name}}</td>
+        <td>{{s.sem}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endif %}
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $("#btn").click(function(){
+        
+        var ccodeid=$("#ccode").val();
+        $.ajax({
+                type:"POST",
+                url:"/enrolledlistajax/",
+                data:{"ccodeid":ccodeid,csrfmiddlewaretoken:"{{csrf_token}}"},
+                success: function(response){
+                    $("#resp").html(response);
+                }
+        });
+    });
+  });
+</script>
